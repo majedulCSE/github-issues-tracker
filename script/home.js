@@ -18,14 +18,20 @@ searchInput.addEventListener("keyup", (e) => {
     });
 });
 
-// use enter press for search
-searchInput.addEventListener("keypress", (e) => {
-    if(e.key === "Enter"){
+// search Box Section
+searchInput.addEventListener("input", (e) => {
         const searchText = e.target.value.trim().toLowerCase();
+        if(searchText === ""){
+            loadIssues(); 
+            return;
+        }
+    
         fetch(` https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${searchText}`)
     .then((res) => res.json())
-    .then((json) => displayIssues(json.data));
-    };
+    .then((json) => {
+        displayIssues(json.data);
+    });
+
 });
 
 // btn toggling

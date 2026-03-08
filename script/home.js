@@ -64,14 +64,14 @@ closedFilterBtn.addEventListener("click", () => {
     displayIssues(closed);
 });
 
-const manageSpiner = (status) => {
-    if(status == true){
-        document.getElementById("spiner").classList.remove("hidden");
-        document.getElementById("container").classList.add("hidden");
+const manageSpinner = (status) => {
+    const spinner = document.getElementById("spinner");
+
+    if(status){
+        spinner.classList.remove("hidden");
     }
     else{
-        document.getElementById("container").classList.remove("hidden");
-        document.getElementById("spiner").classList.add("hidden");
+        spinner.classList.add("hidden");
     }
 };
 
@@ -93,7 +93,7 @@ calculateCard();
 
 // issues fetch 
 const loadIssues = () => {
-    //manageSpiner(true);
+    manageSpinner(true);
     fetch('https://phi-lab-server.vercel.app/api/v1/lab/issues')
     .then ((res) => res.json())
     .then ((json) => {
@@ -149,7 +149,7 @@ const displayIssues = (issues) => {
     for (let issue of issues){
         const card = document.createElement("div");
         card.addEventListener("click", () => {
-            loadingSingleIssu(issue.id);
+            loadingSingleIssue(issue.id);
         });
         card.classList = `bg-white p-10 shadow rounded-2xl space-y-4 border-t-3 ${issue.status === 'open' ? "border-green-500" : "border-purple-500"}`;
         const labelsHTML = createLevels(issue.labels);
@@ -167,16 +167,16 @@ const displayIssues = (issues) => {
                 </div>
                 <div class="border-t border-gray-300">
                 <div class = "mt-4">
-                  <p class="text-p">${issue.author ? issue.author : "N/A"} <br> ${issue.createdAt ? issue.createdAt : "N/A"} <br>  ${issue.assignee ? issue.assignee : "N/A"} <br> ${issue.updatedAt ? issue.updatedAt : "N/A"} </p>
+                  <p class="text-p">Author: ${issue.author ? issue.author : "N/A"} <br> Created At: ${issue.createdAt ? issue.createdAt : "N/A"} <br> Assignee: ${issue.assignee ? issue.assignee : "N/A"} <br> Updated At: ${issue.updatedAt ? issue.updatedAt : "N/A"} </p>
                 </div>
         `;
         issuesContainer.appendChild(card);
-        //manageSpiner(false);
+        manageSpinner(false);
     };
     calculateCard();
 };
 
-const loadingSingleIssu = (id) => {
+const loadingSingleIssue = (id) => {
     fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`)
     .then((res) => res.json())
     .then((json) => showModal(json.data));
